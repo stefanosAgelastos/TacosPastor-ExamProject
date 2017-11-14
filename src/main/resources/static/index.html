@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Confirmation</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+</head>
+<body>
+
+<form action="/quantitiesReport" method="GET">
+
+    <label>Pick a starting date:</label>
+    <input name="startdate" type="date" required="true" min="2017-11-05"/><br/>
+    <label>Pick a end date:</label>
+    <input name="finishdate" type="date" required="true" min="startdate" /><br/>
+    <button type="submit"> Get quantities report for these dates</button>
+
+    <script>
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10){
+            dd='0'+dd
+        }
+        if(mm<10){
+            mm='0'+mm
+        }
+
+        today = yyyy+'-'+mm+'-'+dd;
+        document.getElementById("startdate").setAttribute("max", today);
+        document.getElementById("finishdate").setAttribute("max", today);
+    </script>
+
+    <script type="text/javascript">
+        //$("#startdate, #finishdate").datepicker();
+
+        $("#finishdate").change(function () {
+            var startDate = document.getElementById("startdate").value;
+            var endDate = document.getElementById("finishdate").value;
+
+            if ((Date.parse(endDate) < Date.parse(startDate))) {
+                alert("End date should be greater than Start date");
+                document.getElementById("finishdate").value = "";
+            }
+        });
+    </script>
+
+
+</form>
+</body>
+</html>
