@@ -10,10 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
-@ResponseBody
 public class OrderRegistrationController {
 
     @Autowired
@@ -22,7 +23,7 @@ public class OrderRegistrationController {
     @Autowired
     SoldProductRepository spr;
 
-    //http://localhost:4000/registerOrder?productName=taco1&price=45.5&date=2000-10-31T01:30:00.000-05:00 for testing
+    //http://localhost:4000/registerOrder?productName=taco1&price=45.5 &date=2000-10-31T01:30:00.000-05:00 for testing
 
 @GetMapping("/registerOrder")
     public String registerOrder(
@@ -49,7 +50,7 @@ public class OrderRegistrationController {
 
     Date dateTime = new Date();
     SoldProduct soldProduct = new SoldProduct();
-    soldProduct.setLocalDateTime(dateTime);
+    soldProduct.setSoldDate(dateTime);
     soldProduct.setProduct(toRegister);
     spr.save(soldProduct);
 
@@ -61,15 +62,36 @@ public class OrderRegistrationController {
 @GetMapping("/quantitiesReport")
     public ModelAndView getQuantityReport(
             @RequestParam(name= "startdate", defaultValue = "NO_DATE")
-            @DateTimeFormat (iso = DateTimeFormat.ISO.DATE_TIME)
-                    LocalDateTime startDate,
+            @DateTimeFormat (iso = DateTimeFormat.ISO.DATE)
+                    Date startDate,
             @RequestParam(name= "finishdate", defaultValue = "NO_DATE")
-            @DateTimeFormat (iso = DateTimeFormat.ISO.DATE_TIME)
-                    LocalDateTime finishDate
+            @DateTimeFormat (iso = DateTimeFormat.ISO.DATE)
+                    Date finishDate
 ){
+    finishDate.setTime(finishDate.getTime()+86400000);
     System.out.println(startDate.toString()+finishDate.toString());
+    List<SoldProduct> salesList = spr.findBySoldDateBetween(startDate,finishDate);
+    System.out.println(salesList);
+    for(SoldProduct s: salesList){
+        System.out.println(s);
 
-    return null;
+    }
+    List <DailyReport> dailyReportList= new ArrayList<>();
+
+
+
+
+    DailyReport dr = new DailyReport();
+
+
+
+
+
+    ModelAndView mv = new ModelAndView("productReport");
+    mv.getModel().put("reportDetails", salesList);
+
+
+    return mv;
 }
 
 }

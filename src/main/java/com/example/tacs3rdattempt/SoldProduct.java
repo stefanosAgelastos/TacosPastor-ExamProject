@@ -12,7 +12,7 @@ public class SoldProduct {
     @Id
     private Integer id;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date localDateTime;
+    private Date soldDate;
     @OneToOne
     private Product product;
 
@@ -24,12 +24,12 @@ public class SoldProduct {
         this.id = id;
     }
 
-    public Date getLocalDateTime() {
-        return localDateTime;
+    public Date getSoldDate() {
+        return soldDate;
     }
 
-    public void setLocalDateTime(Date localDateTime) {
-        this.localDateTime = localDateTime;
+    public void setSoldDate(Date soldDate) {
+        this.soldDate = soldDate;
     }
 
     public Product getProduct() {
@@ -38,5 +38,14 @@ public class SoldProduct {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    @Override
+    public String toString() {
+        return "SoldProduct{" +
+                "id=" + id +
+                ", soldDate=" + soldDate +
+                ", product=" + product +
+                '}';
     }
 }

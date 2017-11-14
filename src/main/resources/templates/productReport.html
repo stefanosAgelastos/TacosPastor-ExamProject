@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <td>product name</td>
+        <td>date</td>
+        <td>price</td>
+        <td>product id</td>
+
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${reportDetails.empty}">
+        <td colspan="4">No Sales</td>
+    </tr>
+    <tr th:each="row : ${reportDetails}">
+        <td th:text="${row.product.productName}">1</td>
+        <!--<td><a href="view.html" th:href="@{'/' + ${task.id}}" th:text="${task.title}">Title ...</a></td>-->
+        <td th:text="${row.soldDate}">Name ...</td>
+        <td th:text="${row.product.price}">Name ...</td>
+        <td th:text="${row.product.id}">Name ...</td>
+
+
+    </tr>
+    </tbody>
+</table>
+
+
+
+</body>
+</html>
