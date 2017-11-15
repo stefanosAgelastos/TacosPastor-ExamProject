@@ -10,9 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class OrderRegistrationController {
@@ -60,6 +58,7 @@ public class OrderRegistrationController {
 
     //example of recieved request: http://localhost:63342/quantitiesReport?startdate=2017-11-08&finishdate=2017-11-17
 @GetMapping("/quantitiesReport")
+@ResponseBody()
     public ModelAndView getQuantityReport(
             @RequestParam(name= "startdate", defaultValue = "NO_DATE")
             @DateTimeFormat (iso = DateTimeFormat.ISO.DATE)
@@ -68,27 +67,82 @@ public class OrderRegistrationController {
             @DateTimeFormat (iso = DateTimeFormat.ISO.DATE)
                     Date finishDate
 ){
-    finishDate.setTime(finishDate.getTime()+86400000);
-    System.out.println(startDate.toString()+finishDate.toString());
-    List<SoldProduct> salesList = spr.findBySoldDateBetween(startDate,finishDate);
-    System.out.println(salesList);
-    for(SoldProduct s: salesList){
-        System.out.println(s);
 
-    }
+    //dates are received with the time set at 01:00, we add another 24 hours in order count the sales made during the finishDate
+    finishDate.setTime(finishDate.getTime()+86400000);
+
+
+    //this is the object we will put inside the ModelAndView
     List <DailyReport> dailyReportList= new ArrayList<>();
 
 
+    //we start from the startDate and repeat till we reach the finishDate
+    do{
+        //TODO remove
+        System.out.println(startDate);
+        System.out.println(finishDate);
+
+        //First we get an iterator with all the existing products.
+        Iterator<Product> products = pr.findAll().iterator();
 
 
-    DailyReport dr = new DailyReport();
+        //we make this day's daily report
+        DailyReport todaysDailyReport= new DailyReport();
+        //we set the date of the report
+        todaysDailyReport.setDate(startDate);
 
+        //we iterate through each existing product
+        while(products.hasNext()){
+            Product thisProduct= products.next();
+            //we get from the database all the sales of this product today.
+            List<SoldProduct> salesOfThisProductTodayList = spr.findByProductAndSoldDate(thisProduct, startDate);
+            //TODO remove
+            System.out.println("the sales of the product with id:"+thisProduct.getId()+" are: "+salesOfThisProductTodayList);
+            //we make a new line for the daily report, about the sales of this product today
+            DailyReportLine thisProductsLine = new DailyReportLine();
+            //we set the product of the line to this product
+            thisProductsLine.setProduct(thisProduct);
+            //we set to sero the lunch and dinner counters
+            int lunchSales=0;
+            int dinnerSales=0;
+            //we go through each sale of this product today, in order to count the sales
+            for(SoldProduct sp: salesOfThisProductTodayList){
 
+                //we change the format of the date for convenience
+                Date date = sp.getSoldDate();
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.setTime(date);
 
+                System.out.println("BOO");
 
+                //lunch shift
+                if(calendar.get(Calendar.HOUR_OF_DAY) <= SHIFTS.LUNCH_END){
+                    lunchSales++;
+
+                }
+                //dinner shift
+                else{
+                    dinnerSales++;
+                }
+            }
+
+            //here we set the lunch and dinner sales of the reportline
+            thisProductsLine.setLunchSales(lunchSales);
+            thisProductsLine.setDinnerSales(dinnerSales);
+            //here we add the report line to the daily report
+            todaysDailyReport.getDailyReportLineList().add(thisProductsLine);
+            //TODO remove after debugging
+            System.out.println(lunchSales);
+            System.out.println(dinnerSales);
+        }
+        dailyReportList.add(todaysDailyReport);
+
+        //now we add 24 hours in miliseconds to the starting date
+        startDate.setTime(startDate.getTime()+86400000);
+
+    }while(startDate.before(finishDate));
 
     ModelAndView mv = new ModelAndView("productReport");
-    mv.getModel().put("reportDetails", salesList);
 
 
     return mv;

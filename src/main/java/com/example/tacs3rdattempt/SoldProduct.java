@@ -13,7 +13,7 @@ public class SoldProduct {
     private Integer id;
     @Temporal(TemporalType.TIMESTAMP)
     private Date soldDate;
-    @OneToOne
+    @ManyToOne
     private Product product;
 
     public Integer getId() {
