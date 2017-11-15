@@ -95,7 +95,8 @@ public class OrderRegistrationController {
         while(products.hasNext()){
             Product thisProduct= products.next();
             //we get from the database all the sales of this product today.
-            List<SoldProduct> salesOfThisProductTodayList = spr.findByProductAndSoldDate(thisProduct, startDate);
+            Date endOfThisDay = new Date(startDate.getTime()+86400000);
+            List<SoldProduct> salesOfThisProductTodayList = spr.findByProductAndSoldDateBetween(thisProduct, startDate, endOfThisDay);
             //TODO remove
             System.out.println("the sales of the product with id:"+thisProduct.getId()+" are: "+salesOfThisProductTodayList);
             //we make a new line for the daily report, about the sales of this product today
@@ -143,7 +144,7 @@ public class OrderRegistrationController {
     }while(startDate.before(finishDate));
 
     ModelAndView mv = new ModelAndView("productReport");
-
+    mv.getModel().put("dailyReports", dailyReportList);
 
     return mv;
 }

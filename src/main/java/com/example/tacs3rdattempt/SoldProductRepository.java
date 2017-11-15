@@ -11,7 +11,7 @@ public interface SoldProductRepository extends CrudRepository <SoldProduct,Integ
 
     List<SoldProduct> findAllBySoldDate(Date date);
 
-    List<SoldProduct> findByProductAndSoldDate(Product product, Date date );
+    List<SoldProduct> findByProductAndSoldDateBetween(Product product, Date start, Date stop );
 
 
 }

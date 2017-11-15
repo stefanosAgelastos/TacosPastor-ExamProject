@@ -2,38 +2,58 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title>User</title>
+    <title>Product Report</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-        <td>product name</td>
-        <td>date</td>
-        <td>price</td>
-        <td>product id</td>
+<div th:each="report : ${dailyReports}">
+    <label th:text="${report.date}"> ... </label>
+    <table  class="table table-bordered table-striped">
 
-        <td></td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:if="${reportDetails.empty}">
+        <thead>
+            <tr>
+                <td >Product Name</td>
+                <td>Lunch quantities sold</td>
+                <td>Lunch quantities sold</td>
+                <td>Total quantities</td>
+            </tr>
+         </thead>
+
+        <tbody>
+
+        <tr th:each="row : ${report.dailyReportLineList}">
+            <td th:text="${row.product.productName}"> .. </td>
+            <td th:text="${row.lunchSales}"> .. </td>
+            <td th:text="${row.dinnerSales}"> .. </td>
+            <td> Total sales is... </td>
+        </tr>
+
+
+
+
+
+   <!-- <tr th:if="${dailyReports.empty}">
         <td colspan="4">No Sales</td>
     </tr>
-    <tr th:each="row : ${reportDetails}">
+-->
+<!--    <tr th:each="row : ${reportDetails}">
         <td th:text="${row.product.productName}">1</td>
-        <!--<td><a href="view.html" th:href="@{'/' + ${task.id}}" th:text="${task.title}">Title ...</a></td>-->
+        &lt;!&ndash;<td><a href="view.html" th:href="@{'/' + ${task.id}}" th:text="${task.title}">Title ...</a></td>&ndash;&gt;
         <td th:text="${row.soldDate}">Name ...</td>
         <td th:text="${row.product.price}">Name ...</td>
         <td th:text="${row.product.id}">Name ...</td>
+    </tr>-->
 
 
-    </tr>
     </tbody>
 </table>
+
+</div>
 
 
 
