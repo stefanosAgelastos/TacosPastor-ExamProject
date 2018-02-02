@@ -23,6 +23,8 @@ public class OrderRegistrationController {
 
     //http://localhost:4000/registerOrder?productName=taco1&price=45.5 &date=2000-10-31T01:30:00.000-05:00 for testing
 
+    static List<Product> listOfProducts = new ArrayList<>();
+
 @GetMapping("/registerOrder")
     public String registerOrder(
             @RequestParam(name="productName", defaultValue = "NO_PRODUCT")
@@ -57,13 +59,13 @@ public class OrderRegistrationController {
 
 
     //example of recieved request: http://localhost:63342/quantitiesReport?startdate=2017-11-08&finishdate=2017-11-17
-@GetMapping("/quantitiesReport")
+@RequestMapping("/quantitiesReport")
 @ResponseBody()
     public ModelAndView getQuantityReport(
-            @RequestParam(name= "startdate", defaultValue = "NO_DATE")
+            @RequestParam(name= "startdate", defaultValue = "2018-01-13")
             @DateTimeFormat (iso = DateTimeFormat.ISO.DATE)
                     Date startDate,
-            @RequestParam(name= "finishdate", defaultValue = "NO_DATE")
+            @RequestParam(name= "finishdate", defaultValue = "2018-01-17")
             @DateTimeFormat (iso = DateTimeFormat.ISO.DATE)
                     Date finishDate
 ){
@@ -89,7 +91,7 @@ public class OrderRegistrationController {
         //we make this day's daily report
         DailyReport todaysDailyReport= new DailyReport();
         //we set the date of the report
-        todaysDailyReport.setDate(startDate);
+        todaysDailyReport.setDate(new Date(startDate.getTime()));
 
         //we iterate through each existing product
         while(products.hasNext()){
@@ -138,10 +140,19 @@ public class OrderRegistrationController {
         }
         dailyReportList.add(todaysDailyReport);
 
+        for (DailyReport dailyReport: dailyReportList
+                ) {
+            System.out.println("daily report date: "+dailyReport.date);
+
+        }
+
         //now we add 24 hours in miliseconds to the starting date
         startDate.setTime(startDate.getTime()+86400000);
+        System.out.println("daily report date before loop ends: "+todaysDailyReport.date);
 
     }while(startDate.before(finishDate));
+
+
 
     ModelAndView mv = new ModelAndView("productReport");
     mv.getModel().put("dailyReports", dailyReportList);

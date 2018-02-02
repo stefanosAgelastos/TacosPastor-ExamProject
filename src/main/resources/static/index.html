@@ -5,17 +5,26 @@
     <title>Confirmation</title>
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
-<form action="/quantitiesReport" method="GET">
 
-    <label>Pick a starting date:</label>
-    <input name="startdate" type="date" required="true" min="2017-11-05"/><br/>
-    <label>Pick a end date:</label>
-    <input name="finishdate" type="date" required="true" min="startdate" /><br/>
-    <button type="submit"> Get quantities report for these dates</button>
+
+<div class="login-page">
+    <div class="form">
+<form class="login-form" action="/quantitiesReport" method="GET">
+
+    <input class="button"type="submit" value="Get Sales Report">
+    <p class="message" >Pick start date:</p>
+    <input id="startdate" type="date" required="true" min="2017-11-05"/>
+    <p class="message">Pick end date:</p>
+    <input id="finishdate" type="date" required="true" />
+
+
+</form>
+</div>
+</div>
 
     <script>
         var today = new Date();
@@ -37,18 +46,15 @@
     <script type="text/javascript">
         //$("#startdate, #finishdate").datepicker();
 
-        $("#finishdate").change(function () {
-            var startDate = document.getElementById("startdate").value;
-            var endDate = document.getElementById("finishdate").value;
+        $("#startdate").change(function () {
 
-            if ((Date.parse(endDate) < Date.parse(startDate))) {
-                alert("End date should be greater than Start date");
-                document.getElementById("finishdate").value = "";
-            }
+            var startDate = document.getElementById("startdate").value;
+            document.getElementById("finishdate").setAttribute("min", startDate);
+
         });
     </script>
 
 
-</form>
+
 </body>
 </html>

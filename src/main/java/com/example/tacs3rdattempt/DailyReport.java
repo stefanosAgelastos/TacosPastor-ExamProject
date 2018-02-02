@@ -7,6 +7,15 @@ import java.util.List;
 public class DailyReport {
     Date date;
     List<DailyReportLine > dailyReportLineList = new ArrayList<>() ;
+    private double totalRevenue;
+
+    public double getTotalRevenue() {
+        for (DailyReportLine reportLine: dailyReportLineList
+             ) {
+            totalRevenue+=reportLine.total;
+        }
+        return totalRevenue;
+    }
 
     public Date getDate() {
         return date;

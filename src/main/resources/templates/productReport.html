@@ -19,7 +19,7 @@
             <tr>
                 <td >Product Name</td>
                 <td>Lunch quantities sold</td>
-                <td>Lunch quantities sold</td>
+                <td>Dinner quantities sold</td>
                 <td>Total quantities</td>
             </tr>
          </thead>
@@ -30,7 +30,11 @@
             <td th:text="${row.product.productName}"> .. </td>
             <td th:text="${row.lunchSales}"> .. </td>
             <td th:text="${row.dinnerSales}"> .. </td>
-            <td> Total sales is... </td>
+            <td th:text="${row.totalSales}"> Total sales...  </td>
+        </tr>
+        <tr>
+            <td >Total sales per day</td>
+            <td th:text="${report.totalRevenue}"> ...  </td>
         </tr>
 
 

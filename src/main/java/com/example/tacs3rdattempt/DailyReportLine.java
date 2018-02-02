@@ -4,7 +4,25 @@ public class DailyReportLine {
     private Product product;
     private int lunchSales;
     private int dinnerSales;
-    int total;
+    private int totalSales;
+    double total;
+
+    private void update(){
+        totalSales=lunchSales+dinnerSales;
+        total = totalSales*product.getPrice();
+    }
+
+    public int getTotalSales() {
+        return totalSales;
+    }
+
+    public void setTotalSales(int totalSales) {
+        this.totalSales = totalSales;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 
     public Product getProduct() {
         return product;
@@ -19,7 +37,9 @@ public class DailyReportLine {
     }
 
     public void setLunchSales(int lunchSales) {
+
         this.lunchSales = lunchSales;
+        update();
     }
 
     public int getDinnerSales() {
@@ -28,9 +48,11 @@ public class DailyReportLine {
 
     public void setDinnerSales(int dinnerSales) {
         this.dinnerSales = dinnerSales;
+        update();
     }
 
-    public int getTotal() {
+    public double getTotal() {
+        update();
         return total;
     }
 
